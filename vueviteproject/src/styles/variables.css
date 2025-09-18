@@ -1,0 +1,76 @@
+/* CSS переменные дизайн-системы */
+:root {
+  /* Цвета */
+  --color-primary: #18181B;
+  --color-secondary: #09090B;
+  --color-white: #FFFFFF;
+  
+  /* Серые оттенки */
+  --color-gray-50: #FAFAFA;
+  --color-gray-100: #F8F9FA;
+  --color-gray-200: #E4E4E7;
+  --color-gray-300: #D4D4D8;
+  --color-gray-400: #A1A1AA;
+  --color-gray-500: #71717A;
+  
+  /* Состояния */
+  --color-error: #ef4444;
+  --color-error-light: #FEF2F2;
+  --color-error-border: #FCA5A5;
+  --color-error-text: #DC2626;
+  
+  /* Отступы */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 25px;
+  --spacing-xxl: 32px;
+  
+  /* Радиусы */
+  --border-radius-sm: 6px;
+  --border-radius-md: 8px;
+  
+  /* Размеры кнопок */
+  --button-size-sm: 36px;
+  --button-size-md: 40px;
+  --button-size-lg: 48px;
+  
+  /* Размеры инпутов */
+  --input-height-sm: 36px;
+  --input-height-md: 40px;
+  
+  /* Таблица */
+  --table-row-height: 73px;
+  --table-header-height: 48px;
+  --table-min-height: 350px;
+  
+  /* Переходы */
+  --transition-fast: all 0.2s ease-in-out;
+  --transition-normal: all 0.3s ease-in-out;
+  
+  /* Типографика */
+  --font-family: 'Inter', sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Размеры шрифтов */
+  --font-size-xs: 10px;
+  --font-size-sm: 13px;
+  --font-size-base: 14px;
+  --font-size-md: 14.1px;
+  --font-size-lg: 19.3px;
+  --font-size-xl: 20.2px;
+  --font-size-2xl: 24.2px;
+  --font-size-3xl: 31.1px;
+  
+  /* Высота строк */
+  --line-height-tight: 12px;
+  --line-height-snug: 18px;
+  --line-height-normal: 20px;
+  --line-height-relaxed: 24px;
+  --line-height-loose: 28px;
+  --line-height-xl: 36px;
+}

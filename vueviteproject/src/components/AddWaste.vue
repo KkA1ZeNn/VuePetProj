@@ -1,17 +1,24 @@
 <script setup lang="ts">
 import { reactive, watch } from 'vue'
 import InputField from './InputField.vue'
+import { WASTE_CATEGORIES } from '../constants/categories'
+import { VALIDATION_RULES } from '../utils/validation'
+import type { WasteFormData, WasteFormErrors } from '../types/waste'
+
+const emit = defineEmits<{
+  addWaste: [wasteData: WasteFormData]
+}>()
 
 // Данные формы в одном объекте
-const formData = reactive({
+const formData = reactive<WasteFormData>({
   description: '',
-  amount: '' as string | number,
+  amount: '',
   category: '',
   date: ''
 })
 
 // Ошибки в одном объекте
-const errors = reactive({
+const errors = reactive<WasteFormErrors>({
   description: '',
   amount: '',
   category: '',
@@ -19,31 +26,10 @@ const errors = reactive({
 })
 
 // Опции для категорий
-const categoryOptions = ['Продукты', 'Транспорт', 'Развлечения', 'Здоровье', 'Образование', 'Другое']
+const categoryOptions = [...WASTE_CATEGORIES]
 
 // Правила валидации
-const validationRules = {
-  description: {
-    validate: (value: string | number) => !!String(value).trim(),
-    message: 'Это поле обязательно для заполнения',
-    clearCondition: (value: string | number) => !!String(value).trim()
-  },
-  amount: {
-    validate: (value: string | number) => !!value && Number(value) > 0,
-    message: 'Некорректная сумма', 
-    clearCondition: (value: string | number) => !!value && Number(value) > 0
-  },
-  category: {
-    validate: (value: string | number) => !!String(value),
-    message: 'Выберите категорию',
-    clearCondition: (value: string | number) => !!String(value)
-  },
-  date: {
-    validate: (value: string | number) => !!String(value),
-    message: 'Укажите дату',
-    clearCondition: (value: string | number) => !!String(value)
-  }
-}
+const validationRules = VALIDATION_RULES
 
 // Универсальная функция валидации поля
 const validateField = (fieldName: keyof typeof formData): boolean => {
@@ -93,7 +79,7 @@ const resetForm = () => {
 // Добавление затраты
 const addWaste = () => {
   if (validateForm()) {
-    console.log('Затрата успешно добавлена:', { ...formData })
+    emit('addWaste', { ...formData })
     resetForm()
   }
 }

@@ -1,6 +1,26 @@
 <script setup lang="ts">
     import AddWaste from './AddWaste.vue';
     import WastesList from './WastesList.vue';
+    import { ref } from 'vue';
+    import type { Waste, WasteFormData } from '../types/waste';
+    
+    let nextId = 1;
+    
+    const addWaste = (wasteData: WasteFormData) => {
+        const waste: Waste = {
+            ...wasteData,
+            id: nextId++,
+            amount: Number(wasteData.amount),
+            category: wasteData.category as any // Temporary cast until form validation is updated
+        };
+        wastes.value.push(waste);
+    }
+
+    const deleteWaste = (id: number) => {
+        wastes.value = wastes.value.filter(waste => waste.id !== id);
+    }
+
+    const wastes = ref<Waste[]>([])
 </script>
 
 <template>
@@ -9,8 +29,8 @@
             <h1 class="calc-page_title">Калькулятор затрат</h1>
         </header>
         <main class="calc-page_main">
-            <AddWaste />
-            <WastesList />
+            <AddWaste @addWaste="addWaste" />
+            <WastesList :wastes="wastes" @deleteWaste="deleteWaste" />
         </main>
     </div>
 </template>
