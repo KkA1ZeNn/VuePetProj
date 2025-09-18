@@ -1,13 +1,17 @@
 <script setup lang="ts">
-    import { ref, computed, watch } from 'vue';
+    import { ref, computed, watch, reactive } from 'vue';
     import { WASTE_CATEGORIES } from '../constants/categories';
     import { SORT_OPTIONS } from '../constants/sorting';
-    import type { Waste } from '../types/waste';
+    import { sortWastes } from '../utils/sorting';
+    import type { Waste, FilterOptions } from '../types/waste';
 
     const totalAmount = ref(0);
     const page = ref(1);
     const pageSize = ref(4);
-
+    const filter = reactive<FilterOptions>({
+        category: '',
+        sort: ''
+    });
     const props = defineProps<{
         wastes: Waste[]
     }>();
@@ -20,13 +24,26 @@
         emit('deleteWaste', id);
     };
 
+    const filteredWastes = computed(() => {
+        const filteredByCategory = props.wastes.filter((waste) => {
+            return filter.category === '' || waste.category === filter.category;
+        });
+
+        return sortWastes(filteredByCategory, filter.sort);
+    });
+
+    // Сбрасываем страницу при изменении фильтров
+    watch(() => [filter.sort, filter.category], () => {
+        page.value = 1;
+    });
+
     watch(() => props.wastes, (newWastes) => {
         totalAmount.value = newWastes.reduce((acc, waste) => acc + waste.amount, 0);
     }, { deep: true, immediate: true });
 
     // Ограничиваем отображение до 5 записей на странице
     const displayedWastes = computed(() => {
-        return props.wastes.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+        return filteredWastes.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
     });
 </script>
 
@@ -37,7 +54,7 @@
             <div class="wastes-list-filter_wrapper">
                 <div class="wastes-list-filter_item">
                     <label class="wastes-list-filter_label">Сортировка</label>
-                    <select class="wastes-list-filter_select">
+                    <select class="wastes-list-filter_select" v-model="filter.sort">
                         <option v-for="option in SORT_OPTIONS" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
@@ -45,7 +62,7 @@
                 </div>
                 <div class="wastes-list-filter_item">
                     <label class="wastes-list-filter_label">Фильтр по категориям</label>
-                    <select class="wastes-list-filter_select">
+                    <select class="wastes-list-filter_select" v-model="filter.category">
                         <option value="">Все категории</option>
                         <option v-for="category in WASTE_CATEGORIES" :key="category" :value="category">
                             {{ category }}
@@ -95,7 +112,7 @@
                     </svg>
                 </button>
                 <p class="wastes-list-pagination_text">{{ page }}</p>
-                <button class="wastes-list-pagination_button" @click="page++" :disabled="page >= Math.ceil(props.wastes.length / pageSize)">
+                <button class="wastes-list-pagination_button" @click="page++" :disabled="page >= Math.ceil(filteredWastes.length / pageSize)">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
