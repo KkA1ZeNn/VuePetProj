@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import AddWaste from './AddWaste.vue';
+    import WastesList from './WastesList.vue';
 </script>
 
 <template>
@@ -9,6 +10,7 @@
         </header>
         <main class="calc-page_main">
             <AddWaste />
+            <WastesList />
         </main>
     </div>
 </template>
